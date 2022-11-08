@@ -1,0 +1,193 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>demo.project</groupId>
+    <artifactId>demo-project</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>demo.project.api</groupId>
+  <artifactId>demo-project-api</artifactId>
+  <packaging>jar</packaging>
+  
+  <dependencies>
+  <dependency>
+  	<groupId>demo.project.persistence</groupId>
+  	<artifactId>demo-project-persistence</artifactId>
+  	<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  <dependency>
+  	<groupId>demo.project.model</groupId>
+  	<artifactId>demo-project-model</artifactId>
+  	<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  	<groupId>demo.project.repository</groupId>
+  <artifactId>demo-project-repository</artifactId>
+  	<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  <dependency>
+  	<groupId>demo.project.service</groupId>
+  <artifactId>demo-project-service</artifactId>
+  	<version>0.0.1-SNAPSHOT</version>
+  	</dependency>  	
+  	<dependency>
+ 	  <groupId>demo.project.utility</groupId>
+	  <artifactId>demo-project-utility</artifactId>
+	  <version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+	<groupId>io.springfox</groupId>
+	<artifactId>springfox-swagger2</artifactId>
+	<version>2.6.1</version>
+	<scope>compile</scope>
+	</dependency>
+	<dependency>
+	<groupId>io.springfox</groupId>
+	<artifactId>springfox-swagger-ui</artifactId>
+	<version>2.6.1</version>
+	<scope>compile</scope>
+	</dependency>
+	<dependency>
+    <groupId>net.sf.dozer</groupId>
+    <artifactId>dozer</artifactId>
+    <version>5.5.1</version>
+	</dependency>  	
+	<dependency>
+	      <groupId>io.jsonwebtoken</groupId>
+	      <artifactId>jjwt</artifactId>
+	      <version>0.9.0</version>
+	  </dependency>
+  </dependencies>
+  <build>
+  <plugins>
+   <plugin>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-maven-plugin</artifactId>
+    <executions>
+     <execution>
+      <goals>
+       <goal>repackage</goal>
+      </goals>
+     </execution>
+    </executions>
+   </plugin>
+   <plugin>
+      <artifactId>maven-assembly-plugin</artifactId>
+      <configuration>
+        <archive>
+          <manifest>
+            <mainClass>demo.project.api.configuration.Runner</mainClass>
+          </manifest>
+        </archive>
+        <descriptorRefs>
+          <descriptorRef>jar-with-dependencies</descriptorRef>
+        </descriptorRefs>
+      </configuration>
+    </plugin>
+  </plugins>
+ 
+ </build>	
+ <profiles>
+		<profile>
+			<id>development</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.tomcat.maven</groupId>
+						<artifactId>tomcat7-maven-plugin</artifactId>
+						<version>2.2</version>
+						<configuration>
+							<path>/ROOT</path>
+							<update>true</update>
+							<url>http://localhost:8080/manager/text</url>
+							<username>maven</username>
+							<password>maven123</password>
+						</configuration>
+					</plugin>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.8</version>
+						<executions>
+							<execution>
+								<phase>initialize</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<delete file="target/classes/application.properties" />
+										<delete file="target/classes/hashing.properties" />
+										<delete file="target/classes/jdbc-oracle.properties" />
+										<delete file="target/classes/jwt-token.properties" />
+										<delete file="target/classes/redis.properties" />
+										<copy file="src/main/resources/profiles/development/application.properties"
+											tofile="target/classes/application.properties" />
+										<copy file="src/main/resources/profiles/development/hashing.properties"
+											tofile="target/classes/hashing.properties" />
+										<copy file="src/main/resources/profiles/development/jdbc-oracle.properties"
+											tofile="target/classes/jdbc-oracle.properties" />
+										<copy file="src/main/resources/profiles/development/jwt-token.properties"
+											tofile="target/classes/jwt-token.properties" />
+										<copy file="src/main/resources/profiles/development/redis.properties"
+											tofile="target/classes/redis.properties" />
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>	
+		
+		<profile>
+			<id>production</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.tomcat.maven</groupId>
+						<artifactId>tomcat7-maven-plugin</artifactId>
+						<version>2.2</version>
+						<configuration>
+							<path>/ROOT</path>
+							<update>true</update>
+							<url>http://localhost:8080/manager/text</url>
+							<username>maven</username>
+							<password>maven123</password>
+						</configuration>
+					</plugin>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.8</version>
+						<executions>
+							<execution>
+								<phase>initialize</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<delete file="target/classes/application.properties" />
+										<delete file="target/classes/hashing.properties" />
+										<delete file="target/classes/jdbc-oracle.properties" />
+										<delete file="target/classes/jwt-token.properties" />
+										<delete file="target/classes/redis.properties" />
+										<copy file="src/main/resources/profiles/production/application.properties"
+											tofile="target/classes/application.properties" />
+										<copy file="src/main/resources/profiles/production/hashing.properties"
+											tofile="target/classes/hashing.properties" />
+										<copy file="src/main/resources/profiles/production/jdbc-oracle.properties"
+											tofile="target/classes/jdbc-oracle.properties" />
+										<copy file="src/main/resources/profiles/production/jwt-token.properties"
+											tofile="target/classes/jwt-token.properties" />
+										<copy file="src/main/resources/profiles/production/redis.properties"
+											tofile="target/classes/redis.properties" />
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>			
+	</profiles>
+</project>
